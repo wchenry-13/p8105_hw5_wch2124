@@ -1,0 +1,54 @@
+---
+title: "p8105_hw5_wch2124"
+output: html_document
+date: '2023-11-13'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## problem 1 (0 points)
+```{r}
+## insert answer key code here 
+```
+
+## problem 2 
+
+```{r}
+## load packages 
+library(tidyverse)
+library(rvest)
+```
+
+Create a tidy dataframe containing data from all participants, including the subject ID, arm, and observations over time:
+
+```{r}
+##Start with a dataframe containing all file names; the list.files function will help
+long_data = list.files("./data", pattern = ".csv", all.files = FALSE, 
+full.names = FALSE)
+
+#long_data
+```
+
+```{r}
+## Iterate over file names and read in data for each subject using purrr::map and saving the result as a new variable in the dataframe and Tidy the result; manipulate file names to include control arm and subject ID, make sure weekly observations are “tidy”, and do any other tidying that’s necessary
+
+tidy_data = data.frame(participants = long_data) |> 
+  mutate(file_contents = map(participants, ~read.csv(file.path("./data", .)))) |>  
+  separate(participants, into = c("control", "subject_id")) |>  
+  unnest(file_contents) |> 
+  mutate(control = recode(control, `con` = "control", `exp` = "experiment"))
+```
+
+Make a spaghetti plot showing observations on each subject over time, and comment on differences between groups.
+
+```{r}
+
+#tidy_data |> 
+ # ggplot(aes(x = year, y = avg_data_value)) +
+ # geom_line(aes(group = locationabbr, color = locationabbr)) +
+ # labs(
+  #  title = "Average Data Value Among States by Year",
+   # x = "Year",
+   # y = "Average Data Value")
