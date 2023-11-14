@@ -423,17 +423,22 @@ and comment on differences between groups:</p>
 <h2>problem 3</h2>
 <p>First set the following design elements:</p>
 <pre class="r"><code>set.seed(12345)</code></pre>
-<pre class="r"><code>sim_data_func = function(n = 30, mu = 0, sigma = 5) {
+<pre class="r"><code>sim_data_func = function(mu) {
+  sim_data = tibble(rnorm(n = 30, mean = mu, sd = 5))
   
-  sim_data = tibble(
-    x = rnorm(n, mean = mu, sd = sigma))
+  sim_data |&gt; 
+    t.test() |&gt; 
+    broom::tidy() |&gt; 
+    select(estimate, p.value)
 
-sim_data |&gt;   
-    t.test() |&gt;  
-    broom::tidy() |&gt;  
-    select(mu_hat = estimate, 
-           p_value = p.value)
-}</code></pre>
+}
+
+sim_results = 
+  expand_grid(
+    mu = 0,
+    iter = 1:5000) |&gt; 
+  mutate(estimate_df = map(mu, sim_data_func)) |&gt; 
+  unnest(estimate_df)</code></pre>
 </div>
 
 

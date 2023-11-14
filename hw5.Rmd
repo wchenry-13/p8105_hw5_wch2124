@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ## problem 1 (0 points)
 ```{r}
-## insert answer key code here 
+## solution reviewed in class 
 ```
 
 ## problem 2 
@@ -68,19 +68,26 @@ First set the following design elements:
 set.seed(12345)
 ```
 
+Set μ=0, Generate 5000 datasets from the model:
 
 ```{r}
-sim_data_func = function(n = 30, mu = 0, sigma = 5) {
+sim_data_func = function(mu) {
+  sim_data = tibble(rnorm(n = 30, mean = mu, sd = 5))
   
-  sim_data = tibble(
-    x = rnorm(n, mean = mu, sd = sigma))
+  sim_data |> 
+    t.test() |> 
+    broom::tidy() |> 
+    select(estimate, p.value)
 
-sim_data |>   
-    t.test() |>  
-    broom::tidy() |>  
-    select(mu_hat = estimate, 
-           p_value = p.value)
 }
+
+sim_results = 
+  expand_grid(
+    mu = 0,
+    iter = 1:5000) |> 
+  mutate(estimate_df = map(mu, sim_data_func)) |> 
+  unnest(estimate_df)
+## should we make a table of these values? 
 ```
 
 
