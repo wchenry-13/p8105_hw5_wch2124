@@ -48,6 +48,8 @@ tidy_data = data.frame(participants = long_data) |>
 
 Make a spaghetti plot showing observations on each subject over time, and comment on differences between groups:
 
+The plot shows a clear distinction between the control and experiment groups. Overall, subjects in the control group exhibited less observations over the course of 8 weeks than the subjects experiment group.The greatest number of observations in the control group was about 4, and the greatest number of observations in the experiment group was about 7.5. Very few subjects in the experiment group had less than zero observations recorded, whereas a great number of subjects in the control group had less than zero observations.
+
 ```{r}
 tidy_data |> 
   ggplot(aes(x = week, y = observation)) +
@@ -57,7 +59,7 @@ tidy_data |>
     x = "Week",
     y = "Observations") + facet_grid(. ~ control)
 
-## insert description here 
+ 
 ```
 
 ## problem 3 
@@ -87,7 +89,6 @@ sim_results =
     iter = 1:5000) |> 
   mutate(estimate_df = map(mu, sim_data_func)) |> 
   unnest(estimate_df)
-## should we make a table of these values? 
 ```
 
 Repeat the above for μ={1,2,3,4,5,6}:
@@ -111,8 +112,6 @@ sim_results2 |>
   ggplot(aes(x = mu, y = power)) +
   geom_point() + labs(title = "Association Between Effect Size and Power") +
   geom_smooth()  
-
-## insert description here 
 ```
 
 Make a plot showing the average estimate of μ̂ on the y axis and the true value of μ on the x axis:
@@ -139,7 +138,8 @@ sim_results2 |>
   geom_point() + labs(title = "Average Estimate of mu in Samples Where the Null was Rejected") +
   geom_smooth()
 
-
-## add description here 
 ```
 
+Is the sample average of μ̂ across tests for which the null is rejected approximately equal to the true value of μ? Why or why not?
+
+The sample average of mu across tests for which the null is rejected is equal to the true mean when mu is equal to or greater than 4, and not equal to the true mean when mu is less than 4. This is because of power and effect size: when mu is equal to or greater than 4, power and effect size are large. When mu is less than 4 it is because effect size and power are small. This is illustrated in the first graph, titled "Association Between Effect Size and Power". 
